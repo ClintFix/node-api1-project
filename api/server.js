@@ -19,6 +19,21 @@ server.get("/api/users", (req, res) => {
 })
 
 // [GET] - /api/users/:id - get user by id
+server.get("/api/users/:id", (req, res) => {
+    const idVar = req.params.id;
+    Users.findById(idVar)
+        .then(user => {
+            if(!user) {
+                res.status(404).json('User not found. Please check the User ID')
+            } else {
+                res.status(200).json(user)
+            }
+        })
+        .catch(err => {
+            res.status(500).json({message: err.message})
+        })
+})
+
 
 // [POST] - /api/users - create new user
 

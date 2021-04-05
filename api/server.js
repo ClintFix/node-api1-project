@@ -52,6 +52,25 @@ server.post("/api/users", (req, res) => {
 })
 
 // [PUT] - /api/users/:id - update user and return modified user
+server.put("/api/users/:id", (req, res) => {
+    const {id} = req.params;
+    const changes = req.body;
+    if (!changes.name || !changes.bio) {
+        res.status(422).json("Name and Bio required")
+    } else {
+        Users.update(id, changes)
+            .then(user => {
+                if (!user) {
+                    res.status(422).json("User does not exist")
+                } else {
+                    res.status(201).json(user)
+                }
+            })
+            .catch(err => {
+                res.status(500).json({message: err.message})
+            })
+    }
+})
 
 // [DELETE] - /api/users/:id - remove user by id and return deleted user
 

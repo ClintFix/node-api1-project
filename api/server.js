@@ -73,5 +73,24 @@ server.put("/api/users/:id", (req, res) => {
 })
 
 // [DELETE] - /api/users/:id - remove user by id and return deleted user
+server.delete("/api/users/:id", (req, res) => {
+    const {id} = req.params;
+    Users.remove(id)
+        .then(deletedUser => {
+            if (!deletedUser) {
+                res.status(422).json("This user does not exist. Check User ID")
+            } else {
+                res.status(201).json(deletedUser)
+            }
+        })
+        .catch(err => {
+            res.status(500).json({message: err.message})
+        })
+})
+
+// [GET] = catch all
+server.use("*", (req ,res) => {
+    res.status(404).json({message: 'Well, looks like you didnt quite end up in the right place'})
+})
 
 module.exports = server; // EXPORT YOUR SERVER instead of {}

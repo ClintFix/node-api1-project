@@ -36,6 +36,20 @@ server.get("/api/users/:id", (req, res) => {
 
 
 // [POST] - /api/users - create new user
+server.post("/api/users", (req, res) => {
+    const newUser = req.body;
+    if (!newUser.name || !newUser.bio) {
+        res.status(422).json('Name and Bio are required')
+    } else {
+        Users.insert(newUser)
+            .then(user => {
+                res.status(201).json(user)
+            })
+            .catch(err => {
+                res.status(500).json({message: err.message})
+            })
+    }
+})
 
 // [PUT] - /api/users/:id - update user and return modified user
 
